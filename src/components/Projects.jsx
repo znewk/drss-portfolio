@@ -4,6 +4,8 @@ import {
 } from '../model.js';
 import { uid } from '../storage.js';
 import { Field, Modal, SortTh } from './ui.jsx';
+import { downloadXlsx } from '../xlsx.js';
+import { assignmentsSheet, projectsSheet } from '../reports.js';
 
 const GROUPS = [
   { id: 'approved', label: 'Утверждённые', types: ['support', 'development'] },
@@ -57,6 +59,12 @@ export default function Projects({ data, empById, api }) {
 
   const totalFte = rows.reduce((s, r) => s + r.fte, 0);
 
+  // Выгружаем текущую вкладку с учётом фильтров: сами проекты и их команды.
+  const exportXlsx = () => downloadXlsx(`проекты-${PROJECT_TYPES[type].label.toLowerCase()}`, [
+    projectsSheet(rows, empById),
+    assignmentsSheet(rows, empById),
+  ]);
+
   const newProject = () => setEditing({
     name: '', code: '', type, customer: '', managerId: '', status: 'В работе',
     startDate: '', endDate: '', basis: '', budget: '', plannedFte: '', note: '', assignments: [],
@@ -69,7 +77,10 @@ export default function Projects({ data, empById, api }) {
           <h1>Проекты</h1>
           <p className="sub">{data.projects.length} в реестре</p>
         </div>
-        <button className="btn primary" onClick={newProject}>Добавить проект</button>
+        <div className="head-actions">
+          <button className="btn" onClick={exportXlsx} disabled={!rows.length}>Скачать Excel</button>
+          <button className="btn primary" onClick={newProject}>Добавить проект</button>
+        </div>
       </div>
 
       <div className="tabs" role="tablist">

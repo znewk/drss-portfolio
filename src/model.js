@@ -65,3 +65,47 @@ export const num = (n, digits = 2) =>
 export const pct = (n) => `${Math.round(n)}%`;
 
 export const cmpRu = (a, b) => String(a).localeCompare(String(b), 'ru');
+
+// Полная картина по департаменту: мощность, разрез по типам, загрузка людей.
+// Используется разделом «Сводное» и выгрузкой в Excel — цифры должны совпадать.
+export function summarize(data, empById) {
+  const active = data.employees.filter(isWorking);
+  const capacity = active.reduce((acc, e) => acc + Number(e.rate), 0);
+  const projects = data.projects.filter(isActiveProject);
+
+  const projRows = projects.map((p) => {
+    const fte = p.assignments.reduce((acc, a) => acc + assignmentFte(a, empById), 0);
+    return { p, fte, people: p.assignments.length };
+  });
+  const distributed = projRows.reduce((acc, r) => acc + r.fte, 0);
+
+  const byType = TYPE_ORDER.map((t) => {
+    const rows = projRows.filter((r) => r.p.type === t);
+    const people = new Set(rows.flatMap((r) => r.p.assignments.map((a) => a.employeeId)));
+    const fte = rows.reduce((acc, r) => acc + r.fte, 0);
+    return { type: t, count: rows.length, people: people.size, fte };
+  });
+
+  const approvedPeople = new Set(
+    projRows.filter((r) => PROJECT_TYPES[r.p.type].group === 'approved')
+      .flatMap((r) => r.p.assignments.map((a) => a.employeeId)),
+  ).size;
+
+  const empRows = data.employees
+    .filter((e) => e.status !== 'Уволен')
+    .map((e) => {
+      const l = employeeLoad(e.id, data.projects);
+      const fte = (l.percent / 100) * Number(e.rate);
+      return { e, load: l.percent, items: l.items, fte };
+    });
+
+  return {
+    active, capacity, projects, distributed,
+    projRows: projRows.sort((a, b) => b.fte - a.fte),
+    byType,
+    approvedPeople,
+    empRows: empRows.sort((a, b) => b.load - a.load || cmpRu(a.e.name, b.e.name)),
+    over: empRows.filter((r) => r.load > 100).length,
+    idle: empRows.filter((r) => r.load === 0 && isWorking(r.e)).length,
+  };
+}

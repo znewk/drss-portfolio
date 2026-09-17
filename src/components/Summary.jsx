@@ -1,54 +1,14 @@
 import { useMemo, useState } from 'react';
-import {
-  PROJECT_TYPES, TYPE_ORDER, assignmentFte, cmpRu, employeeLoad, isActiveProject, isWorking, loadTone, num, pct,
-} from '../model.js';
+import { PROJECT_TYPES, isWorking, loadTone, num, pct, summarize } from '../model.js';
 import { Legend, LoadBar, TypeTag } from './ui.jsx';
 import { downloadCsv } from '../csv.js';
+import { downloadXlsx } from '../xlsx.js';
+import { summarySheets } from '../reports.js';
 
 export default function Summary({ data, empById }) {
   const [empFilter, setEmpFilter] = useState('');
 
-  const s = useMemo(() => {
-    const active = data.employees.filter(isWorking);
-    const capacity = active.reduce((acc, e) => acc + Number(e.rate), 0);
-    const projects = data.projects.filter(isActiveProject);
-
-    const projRows = projects.map((p) => {
-      const fte = p.assignments.reduce((acc, a) => acc + assignmentFte(a, empById), 0);
-      return { p, fte, people: p.assignments.length };
-    });
-    const distributed = projRows.reduce((acc, r) => acc + r.fte, 0);
-
-    const byType = TYPE_ORDER.map((t) => {
-      const rows = projRows.filter((r) => r.p.type === t);
-      const people = new Set(rows.flatMap((r) => r.p.assignments.map((a) => a.employeeId)));
-      const fte = rows.reduce((acc, r) => acc + r.fte, 0);
-      return { type: t, count: rows.length, people: people.size, fte };
-    });
-
-    const approvedPeople = new Set(
-      projRows.filter((r) => PROJECT_TYPES[r.p.type].group === 'approved')
-        .flatMap((r) => r.p.assignments.map((a) => a.employeeId)),
-    ).size;
-
-    const empRows = data.employees
-      .filter((e) => e.status !== 'Уволен')
-      .map((e) => {
-        const l = employeeLoad(e.id, data.projects);
-        const fte = (l.percent / 100) * Number(e.rate);
-        return { e, load: l.percent, items: l.items, fte };
-      });
-
-    return {
-      active, capacity, projects, distributed,
-      projRows: projRows.sort((a, b) => b.fte - a.fte),
-      byType,
-      approvedPeople,
-      empRows: empRows.sort((a, b) => b.load - a.load || cmpRu(a.e.name, b.e.name)),
-      over: empRows.filter((r) => r.load > 100).length,
-      idle: empRows.filter((r) => r.load === 0 && isWorking(r.e)).length,
-    };
-  }, [data, empById]);
+  const s = useMemo(() => summarize(data, empById), [data, empById]);
 
   const share = (fte) => (s.distributed > 0 ? (fte / s.distributed) * 100 : 0);
   const approved = s.byType.filter((r) => PROJECT_TYPES[r.type].group === 'approved');
@@ -56,6 +16,7 @@ export default function Summary({ data, empById }) {
   const maxProjFte = Math.max(0.0001, ...s.projRows.map((r) => r.fte));
   const empShown = s.empRows.filter((r) => !empFilter || loadTone(r.load) === empFilter || (empFilter === 'idle' && r.load === 0));
 
+  const exportXlsx = () => downloadXlsx('сводное-дрсс', summarySheets(data, empById));
   const exportProjects = () => downloadCsv('проекты-fte', [
     ['Проект', 'Тип', 'Статус', 'Людей', 'FTE', 'Доля от распределённого, %'],
     ...s.projRows.map((r) => [r.p.name, PROJECT_TYPES[r.p.type].full, r.p.status, r.people, r.fte.toFixed(2), share(r.fte).toFixed(1)]),
@@ -74,6 +35,9 @@ export default function Summary({ data, empById }) {
         <div>
           <h1>Сводное</h1>
           <p className="sub">По незавершённым проектам и сотрудникам со статусом «Активен»</p>
+        </div>
+        <div className="head-actions">
+          <button className="btn" onClick={exportXlsx}>Скачать Excel</button>
         </div>
       </div>
 

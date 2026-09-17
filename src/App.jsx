@@ -5,6 +5,8 @@ import Summary from './components/Summary.jsx';
 import { createSeed } from './seed.js';
 import { loadData, normalize, saveData } from './storage.js';
 import { downloadBlob, today } from './csv.js';
+import { downloadXlsx } from './xlsx.js';
+import { workbookSheets } from './reports.js';
 
 const NAV = [
   { id: 'employees', label: 'Сотрудники' },
@@ -58,6 +60,11 @@ export default function App() {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     downloadBlob(blob, `drss-portfolio-${today()}.json`);
     setToast('Резервная копия скачана');
+  };
+
+  const exportXlsx = () => {
+    downloadXlsx('портфель-дрсс', workbookSheets(data, empById));
+    setToast('Книга Excel скачана');
   };
 
   const importJson = (file) => {
@@ -114,6 +121,7 @@ export default function App() {
           </p>
           <button className="btn side-btn" onClick={exportJson}>Скачать копию</button>
           <button className="btn side-btn" onClick={() => fileRef.current?.click()}>Загрузить из файла</button>
+          <button className="btn side-btn" onClick={exportXlsx}>Выгрузить в Excel</button>
           <button className="btn side-btn danger-ghost" onClick={reset}>Сбросить к начальному списку</button>
           <input ref={fileRef} type="file" accept="application/json,.json" hidden
             onChange={(e) => { importJson(e.target.files?.[0]); e.target.value = ''; }} />

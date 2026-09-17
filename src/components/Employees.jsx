@@ -4,6 +4,8 @@ import {
 } from '../model.js';
 import { uid } from '../storage.js';
 import { Field, Legend, LoadBar, Modal, SortTh, TypeTag } from './ui.jsx';
+import { downloadXlsx } from '../xlsx.js';
+import { employeesSheet } from '../reports.js';
 
 const EMPTY = {
   name: '', position: 'Инженер', managerId: '', format: 'Офис', officeDays: 3,
@@ -41,6 +43,10 @@ export default function Employees({ data, empById, api }) {
   const active = data.employees.filter(isWorking);
   const capacity = active.reduce((s, e) => s + Number(e.rate), 0);
 
+  // Выгружаем то, что видно на экране: с учётом поиска, фильтров и сортировки.
+  const exportXlsx = () =>
+    downloadXlsx('сотрудники-дрсс', [employeesSheet(rows, data.projects, empById)]);
+
   return (
     <section>
       <div className="page-head">
@@ -48,7 +54,10 @@ export default function Employees({ data, empById, api }) {
           <h1>Сотрудники</h1>
           <p className="sub">{data.employees.length} в списке, {active.length} активных, мощность {num(capacity, 2)} FTE</p>
         </div>
-        <button className="btn primary" onClick={() => setEditing({ ...EMPTY })}>Добавить сотрудника</button>
+        <div className="head-actions">
+          <button className="btn" onClick={exportXlsx} disabled={!rows.length}>Скачать Excel</button>
+          <button className="btn primary" onClick={() => setEditing({ ...EMPTY })}>Добавить сотрудника</button>
+        </div>
       </div>
 
       <div className="toolbar">

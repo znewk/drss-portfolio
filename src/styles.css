@@ -121,6 +121,7 @@ input:hover, select:hover, textarea:hover { border-color: #b5c3ca; }
 textarea { resize: vertical; }
 
 .page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 18px; }
+.head-actions { display: flex; gap: 8px; flex-shrink: 0; }
 .sub { margin: 4px 0 0; color: var(--muted); }
 
 .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
