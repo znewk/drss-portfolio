@@ -68,6 +68,84 @@ const STAFF = [
   ['Асет Максутбеков', 'Ведущий инженер'],
 ];
 
+// Портфель систем департамента (сводная таблица портфеля).
+// [проект, заказчик, договор, сервер, стек, архитектура, архитектура с 2026, архитектура в плане, доп.]
+const SYSTEMS = [
+  ['УТО(ОСК)', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', '', 'Монолит'],
+  ['УТО(ОКК)', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', '', 'Монолит'],
+  ['УТО(ОТК)', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', '', 'Монолит'],
+  ['УТО(ОЗЕН)', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', 'Микросервис', 'Микросервис'],
+  ['УТО(КБМ)', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', 'Микросервис', 'Микросервис'],
+  ['ВОРК OLD', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', '', 'Монолит'],
+  ['ВОРК NEW', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', 'Микросервис', 'Микросервис'],
+  ['ПРАЙС', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', 'Микросервис', 'Микросервис'],
+  ['ХСЕ', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', '', 'Микросервис'],
+  ['ЦУБКС', 'KMG', 'Действует', 'KMG (QazQloud)', 'DRF', 'Монолит', '', 'Монолит'],
+  ['Procu', '', '', '', '', '', '', '', { status: 'Планируется', note: 'В таблице портфеля указано только название.' }],
+  ['АРХИВ OLD', 'KMG', 'Действует', 'KMG (QazQloud)', 'FastApi', 'Монолит', '', 'Монолит'],
+  ['Файловое хранилище OLD', 'KMG', 'Действует', 'KMG (QazQloud)', 'FastApi', 'Монолит', '', 'Монолит'],
+  ['АРХИВ NEW', 'KMG', 'Действует', 'KMG (QazQloud)', 'FastApi', 'Монолит', '', 'Монолит'],
+  ['Файловое хранилище NEW', 'KMG', 'Действует', 'KMG (QazQloud)', 'FastApi', 'Монолит', '', 'Монолит'],
+  ['АНПЗ БОТ', 'АНПЗ', 'Действует', 'Заказчика', 'Aiogram', 'Монолит', '', 'Монолит'],
+  ['ФСУ', 'KMG ДПК', 'Без договора', 'KMG (QazQloud)', 'DRF', 'Монолит', '', 'Монолит', { type: 'unapproved' }],
+  ['KTO Портал', 'KTO', 'Будет допсоглашение', 'KTO', 'Frappe', 'Монолит', '', 'Монолит'],
+  ['Onboarding Bot', 'KMG Digital', 'Без договора', 'KMG (QazQloud)', 'Aiogram', 'Монолит', '', 'Монолит', { type: 'initiative' }],
+  ['СДД', 'KMG', 'Действует', 'KMG (QazQloud)', 'GO', 'Монолит', '', 'Микросервис'],
+  ['АСДЦ', 'KMG', 'Действует', 'KMG (QazQloud)', '.net', 'Монолит', '', 'Микросервис'],
+  ['Портал Bitrix24 (KMG)', 'KMG', 'Действует', 'KMG (QazQloud)', 'bitrix24', 'Монолит', '', 'Монолит'],
+  ['Портал Bitrix24 (PetroChem)', 'PetroChem', 'Действует', 'KMG (QazQloud)', 'bitrix24', 'Монолит', '', 'Монолит'],
+  ['Портал Bitrix24 (АНПЗ)', 'ANPZ', 'Действует', 'ANPZ', 'bitrix24', 'Монолит', '', 'Монолит'],
+  ['e-portal', 'KMG Digital', 'Без договора', 'Digital (QazQloud)', 'bitrix24', 'Монолит', '', 'Монолит', { type: 'initiative' }],
+  ['КМГ корп сайт', 'KMG', 'Действует', 'KMG (QazQloud)', 'bitrixBus', 'Монолит', '', 'Монолит'],
+  ['КТМ корп сайт', 'КазТуркМунайГаз', 'Действует', 'KMG (QazQloud)', 'bitrixBus', 'Монолит', '', 'Монолит'],
+  ['KPI корп сайт', 'KPI', 'Действует', 'KMG (QazQloud)', 'bitrixBus', 'Монолит', '', 'Монолит'],
+  ['КазГПЗ корп сайт', 'КазГПЗ', 'Действует', 'KMG (QazQloud)', 'bitrixBus', 'Монолит', '', 'Монолит'],
+  ['Корп сайт digital', 'KMG Digital', 'Без договора', 'Digital (QazQloud)', 'bitrixBus', 'Монолит', '', 'Монолит', { type: 'initiative' }],
+  ['ABAI', 'KMG', 'Действует', 'KMG (QazQloud)', 'php, python', 'Микросервис', '', 'Микросервис', { note: 'Обновляет ПРОД: KMGI.' }],
+  ['АИСЭМ', 'KMG', 'Действует', 'KMG (QazQloud)', 'NodeJs', 'Монолит', '', 'Монолит'],
+  ['БДА', 'KMG', 'Действует', 'KMG (QazQloud)', '.net', 'Монолит', '', 'Монолит'],
+  ['Санау', 'KMG', 'Действует', 'KMG (QazQloud)', '.net', 'Монолит', '', 'Монолит'],
+  ['Корп портал КТО', 'KTO', 'Действует', 'KTO', 'SharePoint', 'Монолит', '', 'Монолит'],
+  ['Корп МП КТО', 'KTO', 'Действует', 'Digital (QazQloud)', 'Flatter', 'Монолит', '', 'Монолит'],
+  ['Compliance control', 'KMG', 'Действует', 'KMG (QazQloud)', '.net', 'Монолит', '', 'Монолит'],
+  ['ИСУП', 'KMG', 'Действует', 'KMG (QazQloud)', 'SharePoint', 'Монолит', '', 'Монолит'],
+  ['Интранет', 'KMG', 'Действует', 'KMG (QazQloud)', 'SharePoint', 'Монолит', '', 'Монолит'],
+  ['БоардМэпс', 'KMG', 'Действует', 'KMG (QazQloud)', '.net', 'Монолит', '', 'Монолит'],
+  ['Бюро пропусков', 'KMG', 'Договор расторгнут', 'KMG (QazQloud)', '.net', 'Монолит', '', 'Монолит', { status: 'Приостановлен' }],
+  ['СЭД', 'KMG', 'Действует', 'KMG (QazQloud)', 'Диретум', 'Монолит', '', 'Монолит'],
+  ['Документолог', '', 'Действует', '', '', '', '', ''],
+  ['УТО Эмба', 'ЭМБА', 'Действует', 'ЭМБА', '.net', 'Монолит', '', 'Микросервис'],
+  ['КМГ ДАТА', '', '', '', '', '', '', '', { status: 'Планируется', note: 'В таблице портфеля указано только название.' }],
+];
+
+// Микросервисы и доработки внутри систем. [система, доработка, статус]
+const DEV = [
+  ['ВОРК NEW', 'ГБФЛ', 'В работе'],
+  ['ВОРК NEW', 'Генерация документов', 'В работе'],
+  ['ВОРК NEW', 'Logger', 'Планируется'],
+  ['ПРАЙС', 'Integration (АСУ НС, ГБДУ, SAP)', 'В работе'],
+  ['ПРАЙС', 'Notification', 'В работе'],
+  ['ПРАЙС', 'Генерация документов', 'В работе'],
+  ['ПРАЙС', 'Справочники', 'Планируется'],
+  ['ПРАЙС', 'SAP', 'Планируется'],
+  ['ПРАЙС', 'DWH', 'Планируется'],
+  ['ПРАЙС', 'Ком. предложение', 'Планируется'],
+  ['ПРАЙС', 'Подрядчики', 'Планируется'],
+  ['ХСЕ', 'ЭНД', 'В работе'],
+  ['ХСЕ', 'Карты коргау', 'В работе'],
+  ['ХСЕ', 'Notification', 'Планируется'],
+  ['ХСЕ', 'ФОРМЫ', 'Планируется'],
+  ['УТО(ОЗЕН)', 'WIALON', 'В работе'],
+  ['УТО(ОЗЕН)', 'Integration (1С, SAP)', 'В работе'],
+  ['УТО(КБМ)', 'WIALON', 'В работе'],
+  ['УТО(КБМ)', 'Integration (1С, SAP)', 'В работе'],
+  ['СДД', 'Интеграция', 'Планируется'],
+  ['АИСЭМ', 'Сервис расчётов', 'Планируется'],
+  ['УТО Эмба', 'Маршрутизация и интеграция', 'В работе'],
+  ['Compliance control', 'Модули', 'Планируется'],
+  ['ФСУ', 'Интеграция 1С', 'Планируется'],
+];
+
 const base = (name, position, managerId = '') => ({
   id: uid(),
   name,
@@ -82,11 +160,65 @@ const base = (name, position, managerId = '') => ({
   note: '',
 });
 
+const project = (name, extra = {}) => ({
+  id: uid(),
+  name,
+  code: '',
+  type: 'support',
+  customer: '',
+  managerId: '',
+  status: 'В работе',
+  startDate: '',
+  endDate: '',
+  basis: '',
+  budget: '',
+  plannedFte: '',
+  note: '',
+  assignments: [],
+  ...extra,
+});
+
+// Собирает примечание из технических колонок таблицы портфеля.
+function techNote(server, stack, arch, arch2026, archPlan, extra) {
+  const parts = [];
+  if (server) parts.push(`Сервер: ${server}`);
+  if (stack) parts.push(`Стек: ${stack}`);
+  if (arch2026) parts.push(`Архитектура: ${arch} → ${arch2026} (в разработке с 2026)`);
+  else if (archPlan && archPlan !== arch) parts.push(`Архитектура: ${arch} → ${archPlan} (план)`);
+  else if (arch) parts.push(`Архитектура: ${arch}`);
+  if (extra) parts.push(extra);
+  return parts.join(' · ');
+}
+
 export function createSeed() {
   const director = base('Айсен Жылкыбай', 'Директор департамента');
+
+  const systems = SYSTEMS.map(([name, customer, basis, server, stack, arch, arch2026, archPlan, opts = {}]) => {
+    const { note, ...rest } = opts;
+    return project(name, {
+      customer,
+      basis,
+      note: techNote(server, stack, arch, arch2026, archPlan, note),
+      ...rest,
+    });
+  });
+
+  const byName = new Map(systems.map((p) => [p.name, p]));
+  // Доработка наследует заказчика и основание системы; у утверждённых систем тип — «развитие».
+  const dev = DEV.map(([parentName, item, status]) => {
+    const parent = byName.get(parentName);
+    return project(`${parentName} — ${item}`, {
+      type: parent && parent.type !== 'support' ? parent.type : 'development',
+      status,
+      customer: parent ? parent.customer : '',
+      basis: parent ? parent.basis : '',
+      note: `Доработка системы «${parentName}».`,
+    });
+  });
+
   return {
     version: 1,
     employees: [director, ...STAFF.map(([n, p]) => base(n, p, director.id))],
-    projects: [],
+    projects: [...systems, ...dev],
   };
 }
