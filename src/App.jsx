@@ -70,8 +70,9 @@ export default function App() {
           setData(next);
           setToast('Данные загружены из файла');
         }
-      } catch {
-        window.alert('Файл не распознан. Нужен JSON, скачанный кнопкой «Скачать копию».');
+      } catch (e) {
+        // userText ставит storage.js: битый формат, слишком новая схема, нет миграции.
+        window.alert(e?.userText || 'Файл не распознан. Нужен JSON, скачанный кнопкой «Скачать копию».');
       }
     };
     reader.readAsText(file);

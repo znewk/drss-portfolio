@@ -1,4 +1,4 @@
-import { uid } from './storage.js';
+import { uid, VERSION } from './storage.js';
 
 // Стартовый состав департамента. Загружается только при первом запуске
 // (или по кнопке «Сбросить к начальному списку»).
@@ -217,7 +217,7 @@ export function createSeed() {
   });
 
   return {
-    version: 1,
+    version: VERSION,
     employees: [director, ...STAFF.map(([n, p]) => base(n, p, director.id))],
     projects: [...systems, ...dev],
   };
